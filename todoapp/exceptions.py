@@ -1,6 +1,11 @@
+import logging
+import traceback
+
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
+
+logger = logging.getLogger(__name__)
 
 
 def custom_exception_handler(exc, context):
@@ -16,6 +21,10 @@ def custom_exception_handler(exc, context):
             }
         }
         return Response(custom_response, status=response.status_code)
+    
+    # Log unexpected errors (visible in Render logs)
+    logger.exception("Unhandled exception in API: %s", exc)
+    traceback.print_exc()
     
     # Handle unexpected errors
     return Response({

@@ -7,6 +7,35 @@ from .models import Todo
 from .serializers import TodoSerializer, CreateTodoSerializer
 
 
+@api_view(['GET', 'HEAD'])
+def root(request):
+    """Root URL: API info (avoids 404 when visiting service URL)."""
+    return Response({
+        'data': {
+            'message': 'Todo API',
+            'docs': {
+                'health': '/health',
+                'todos': '/api/todos',
+                'todo_by_id': '/api/todos/<id>',
+            },
+        },
+    })
+
+
+@api_view(['GET', 'HEAD'])
+def api_root(request):
+    """GET /api: list of API endpoints (avoids 404 when visiting /api)."""
+    return Response({
+        'data': {
+            'message': 'Todo API',
+            'endpoints': {
+                'todos': '/api/todos',
+                'todo_by_id': '/api/todos/<id>',
+            },
+        },
+    })
+
+
 @api_view(['GET'])
 def health_check(request):
     """Health check endpoint."""
